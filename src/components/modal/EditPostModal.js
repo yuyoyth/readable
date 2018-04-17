@@ -4,9 +4,11 @@ import {FormGroup, ControlLabel, FormControl, Label} from 'react-bootstrap'
 import PropTypes from "prop-types";
 import {editPost} from "../../actions/PostActions";
 import {connect} from "react-redux";
-import escapeRegExp from "escape-string-regexp";
 import {editPost as editPostAPI} from "../../utils/api";
 
+/**
+ * 编辑帖子modal
+ */
 class EditPostModal extends Component{
   static propTypes = {
     postId: PropTypes.string.isRequired,
@@ -26,6 +28,7 @@ class EditPostModal extends Component{
     super(props);
     const {posts, postId} = this.props;
     const post = posts[postId];
+    //载入原帖子信息
     this.state.titleInput = post.title;
     this.state.bodyInput = post.body;
   }
@@ -67,9 +70,6 @@ class EditPostModal extends Component{
     if (newState.warringLabelDisplay) {
       this.setState(newState)
     }else {
-      title = escapeRegExp(title);
-      body = escapeRegExp(body);
-
       this.setState({fetching: true});
       editPostAPI(id, {title, body}).then(re => {
         this.setState({fetching: false});

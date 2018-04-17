@@ -1,3 +1,7 @@
+/**
+ * 用户名Action
+ */
+
 export const EDIT_NAME = 'EDIT_NAME';
 
 export const editName = (newName) => ({

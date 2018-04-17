@@ -1,11 +1,14 @@
 import React, {Component} from 'react'
 import PropTypes from 'prop-types'
-import escapeRegExp from 'escape-string-regexp'
 import BaseModal from './BaseModal'
 import {Label} from 'react-bootstrap'
 import {editName} from "../../actions/UserNameAction";
 import {connect} from "react-redux";
+import {verifyUserName} from '../../utils/tools'
 
+/**
+ * 用户名编辑modal
+ */
 class NameEditModal extends Component{
   static propTypes = {
     open: PropTypes.bool.isRequired,
@@ -33,7 +36,8 @@ class NameEditModal extends Component{
 
   warringInfoArr = [
     '请输入新用户名',
-    '长度不要超过16个字符'
+    '长度不要超过16个字符',
+    '用户名只能包含字母数字及下划线'
   ];
 
   submitHandle = (value) => {
@@ -41,8 +45,10 @@ class NameEditModal extends Component{
       this.setState({warringLabelDisplay: true, warringInfo: this.warringInfoArr[0]})
     }else if (value.length > 16) {
       this.setState({warringLabelDisplay: true, warringInfo: this.warringInfoArr[1]})
+    }else if (!verifyUserName(value)) {
+      this.setState({warringLabelDisplay: true, warringInfo: this.warringInfoArr[2]})
     }else {
-      this.props.editName(escapeRegExp(value));
+      this.props.editName(value);
       this.closeHandle(true)
     }
   };

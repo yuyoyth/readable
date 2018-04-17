@@ -8,7 +8,9 @@ import {votePost} from '../actions/PostActions'
 import {voteComment} from '../actions/CommentActions'
 import {votePost as votePostAPI, voteComment as voteCommentAPI} from '../utils/api'
 
+//展示内容所属类型
 export const TypeEnum = {POST: 1, COMMENT: 2};
+//投票类型
 export const VoteEnum = {DOWN: 0, UP: 1};
 
 class CommentBody extends Component{
@@ -16,10 +18,16 @@ class CommentBody extends Component{
     type: PropTypes.number.isRequired,
     id: PropTypes.string.isRequired,
     floor: PropTypes.number.isRequired,
-    editButtonClickHandle: PropTypes.func.isRequired,
-    deleteButtonClickHandle: PropTypes.func.isRequired,
+    editButtonClickHandle: PropTypes.func.isRequired, //编辑按钮点击回调
+    deleteButtonClickHandle: PropTypes.func.isRequired, //删除按钮点击回调
   };
 
+  /**
+   * 投票按钮点击回调
+   * @param type 操作的类型
+   * @param id 帖子或评论id
+   * @param vote 投票操作
+   */
   voteButtonClick = (type, id, vote) => {
     if (type === TypeEnum.POST) {
       votePostAPI(id, vote === VoteEnum.UP).then(re => {

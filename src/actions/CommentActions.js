@@ -1,3 +1,7 @@
+/**
+ * 评论Action
+ */
+
 export const INIT_POST_TO_COMMENT = 'INIT_POST_TO_COMMENT';
 export const ADD_COMMENT = 'ADD_COMMENT';
 export const EDIT_COMMENT = 'EDIT_COMMENT';

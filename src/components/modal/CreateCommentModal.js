@@ -6,10 +6,12 @@ import {addComment} from '../../actions/CommentActions'
 import {completeAddComment} from "../../actions/PostActions";
 import {connect} from "react-redux";
 import PropTypes from "prop-types";
-import {generateUUID} from "../../utils/tools";
-import escapeRegExp from "escape-string-regexp";
+import {generateUUID, verifyUserName} from "../../utils/tools";
 import {addComment as addCommentAPI} from "../../utils/api";
 
+/**
+ * 添加评论modal
+ */
 class CreateCommentModal extends Component{
   static propTypes = {
     open: PropTypes.bool.isRequired,
@@ -50,6 +52,7 @@ class CreateCommentModal extends Component{
     '内容长度不能超过1000个字符',
     '请输入创建者名称',
     '创建者名称不能超过16个字符',
+    '创建者名称只能包含字母数字及下划线',
   ];
 
   submitHandle = (body, author, parentId) => {
@@ -62,6 +65,8 @@ class CreateCommentModal extends Component{
       newState.warringInfo = this.warringInfoArr[2]
     }else if (author.length > 16) {
       newState.warringInfo = this.warringInfoArr[3]
+    }else if (!verifyUserName(author)) {
+      newState.warringInfo = this.warringInfoArr[4]
     }else {
       newState.warringLabelDisplay = false;
     }
@@ -70,9 +75,8 @@ class CreateCommentModal extends Component{
       this.setState(newState)
     }else {
       const [id, timestamp] = [generateUUID(), Date.now()];
-      body = escapeRegExp(body);
-      author = escapeRegExp(author);
 
+      //异步请求更新
       this.setState({fetching: true});
       addCommentAPI({id, timestamp, body, author, parentId}).then(re => {
         this.setState({fetching: false});

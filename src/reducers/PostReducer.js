@@ -26,6 +26,11 @@ export default function (state = initialState, action) {
   return action_programs.hasOwnProperty(action.type) ? action_programs[action.type]() : state
 }
 
+/**
+ * 初始化所有帖子
+ * @param posts 帖子数组
+ * @returns {*}
+ */
 const init = (posts) => posts.reduce(
   (result, post) => {
     const {id, timestamp, title, body, author, category, voteScore, commentCount, deleted} = post;
@@ -37,6 +42,17 @@ const init = (posts) => posts.reduce(
   }, {...initialState}
 );
 
+/**
+ * 添加帖子
+ * @param state
+ * @param id 帖子id
+ * @param timestamp 时间戳
+ * @param title 标题
+ * @param body 内容
+ * @param author 作者
+ * @param category 类别
+ * @returns {{categoriesToPost: {}, posts: {}}}
+ */
 const addPost = (state, {id, timestamp, title, body, author, category}) => ({
   ...state,
   categoriesToPost: {
@@ -58,6 +74,14 @@ const addPost = (state, {id, timestamp, title, body, author, category}) => ({
   },
 });
 
+/**
+ * 编辑帖子
+ * @param state
+ * @param id 帖子id
+ * @param title 标题
+ * @param body 内容
+ * @returns {{posts: {}}}
+ */
 const editPost = (state, {id, title, body}) => ({
   ...state,
   posts: {
@@ -69,6 +93,12 @@ const editPost = (state, {id, title, body}) => ({
   },
 });
 
+/**
+ * 删除帖子
+ * @param state
+ * @param id 帖子id
+ * @returns {{categoriesToPost: {}, posts: {}}}
+ */
 const deletePost = (state, id) => ({
   categoriesToPost: {
     ...state.categoriesToPost,
@@ -87,6 +117,13 @@ const deletePost = (state, id) => ({
   )
 });
 
+/**
+ * 为帖子投票
+ * @param state
+ * @param id 帖子id
+ * @param option true-增票，false-减票
+ * @returns {{posts: {}}}
+ */
 const votePost = (state, {id, option}) => ({
   ...state,
   posts: {
@@ -98,6 +135,13 @@ const votePost = (state, {id, option}) => ({
   },
 });
 
+/**
+ * 帖子添加或删除评论时，修改包含的评论数
+ * @param state
+ * @param id 帖子id
+ * @param commentCountUp true-评论数+1，false-评论数-1
+ * @returns {{posts: {}}}
+ */
 const completeAddOrDeleteComment = (state, id, commentCountUp) => ({
   ...state,
   posts: {

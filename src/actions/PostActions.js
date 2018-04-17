@@ -1,3 +1,7 @@
+/**
+ * 帖子Action
+ */
+
 export const INIT_POST = 'INIT_POST';
 export const ADD_POST = 'ADD_POST';
 export const EDIT_POST = 'EDIT_POST';

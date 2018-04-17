@@ -5,6 +5,7 @@ import {FaSort, FaSortAmountAsc, FaSortAmountDesc} from "react-icons/lib/fa/inde
 import {formatTimestamp} from "../utils/tools";
 import {Link} from 'react-router-dom'
 
+//排序状态
 export const sortStateEnum = {
   DATE_ASC: 0,
   DATE_DESC: 1,
@@ -12,38 +13,41 @@ export const sortStateEnum = {
   VOTE_DESC: 3,
 };
 
+/**
+ * 展示帖子标题的列表
+ */
 class TitleList extends Component{
   static propTypes = {
     posts: PropTypes.array.isRequired,
-    displayCategory: PropTypes.bool,
+    displayCategory: PropTypes.bool, //是否展示类别列
     sortChangeHandle: PropTypes.func.isRequired
   };
 
   state = {
-    sortState: sortStateEnum.VOTE_DESC
+    sortState: sortStateEnum.VOTE_DESC,  //默认得票数从大到小排序
   };
 
+  //点击时间排序回调
   dateSortClick = () => {
     const {sortState} = this.state;
     let newSortState = sortStateEnum.DATE_DESC;
     if (sortState > 1) {
       newSortState = sortStateEnum.DATE_DESC;
     }else {
-      sortState === sortStateEnum.DATE_DESC && (newSortState = sortStateEnum.DATE_ASC);
-      sortState === sortStateEnum.DATE_ASC && (newSortState = sortStateEnum.DATE_DESC);
+      newSortState = sortState === sortStateEnum.DATE_DESC ? sortStateEnum.DATE_ASC : sortStateEnum.DATE_DESC
     }
     this.setState({sortState: newSortState});
     this.props.sortChangeHandle(newSortState);
   };
 
+  //点击得票排序回调
   voteSortClick = () => {
     const {sortState} = this.state;
     let newSortState = sortStateEnum.VOTE_DESC;
     if (sortState < 2) {
       newSortState = sortStateEnum.VOTE_DESC;
     }else {
-      sortState === sortStateEnum.VOTE_DESC && (newSortState = sortStateEnum.VOTE_ASC);
-      sortState === sortStateEnum.VOTE_ASC && (newSortState = sortStateEnum.VOTE_DESC);
+      newSortState = sortState === sortStateEnum.VOTE_DESC ? sortStateEnum.VOTE_ASC : sortStateEnum.VOTE_DESC
     }
     this.setState({sortState: newSortState});
     this.props.sortChangeHandle(newSortState);

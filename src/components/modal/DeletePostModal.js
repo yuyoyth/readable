@@ -6,6 +6,9 @@ import {deletePost} from "../../actions/PostActions";
 import {connect} from "react-redux";
 import {deletePost as deletePostAPI} from "../../utils/api";
 
+/**
+ * 删除帖子modal
+ */
 class DeletePostModal extends Component{
   static propTypes = {
     postId: PropTypes.string.isRequired,
@@ -22,7 +25,6 @@ class DeletePostModal extends Component{
   };
 
   submitHandle = (id) => {
-    let newState = {};
     this.setState({fetching: true});
     deletePostAPI(id).then(re => {
       this.setState({fetching: false});

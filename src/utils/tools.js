@@ -1,11 +1,13 @@
 import UUID from 'uuid-js'
 
+//生成UUID工具
 export const generateUUID = () => UUID.create().toString();
 
-Date.prototype.format = function (format = 'yyyy-MM-dd hh:mm:ss') {
-  return formatDate(this, format);
-};
+export function verifyUserName(userName) {
+  return !(new RegExp(/[^a-zA-Z0-9_]+/).test(userName))
+}
 
+//将时间戳转换为对应时间格式的字符串
 export function formatTimestamp(timestamp, format = 'yyyy-MM-dd hh:mm:ss') {
   return formatDate(new Date(timestamp), format);
 }

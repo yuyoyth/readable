@@ -1,3 +1,7 @@
+/**
+ * 类别Action
+ */
+
 export const INIT_CATEGORIES = 'INIT_CATEGORIES';
 
 export const initCategories = (categories) => ({

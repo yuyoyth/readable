@@ -1,14 +1,16 @@
 import React, {Component} from 'react'
 import PropTypes from 'prop-types'
-import escapeRegExp from 'escape-string-regexp'
 import BaseModal from './BaseModal'
 import {FormGroup, ControlLabel, FormControl, Label} from 'react-bootstrap'
 import {addPost} from '../../actions/PostActions'
 import {editName} from '../../actions/UserNameAction'
 import {connect} from 'react-redux'
-import {generateUUID} from '../../utils/tools'
+import {generateUUID, verifyUserName} from '../../utils/tools'
 import {addPost as addPostAPI} from '../../utils/api'
 
+/**
+ * 添加帖子modal
+ */
 class CreatePostModal extends Component{
   static propTypes = {
     open: PropTypes.bool.isRequired,
@@ -30,6 +32,7 @@ class CreatePostModal extends Component{
   constructor(props) {
     super(props);
     this.state.userNameInput = this.props.userName;
+    //如果传入selectedCategory属性，则固定类别
     this.props.selectedCategory && (this.state.categorySelect = this.props.selectedCategory)
   }
 
@@ -56,6 +59,7 @@ class CreatePostModal extends Component{
     '内容长度不能超过1000个字符',
     '请输入创建者名称',
     '创建者名称不能超过16个字符',
+    '创建者名称只能包含字母数字及下划线',
     '请选择类别'
   ];
 
@@ -73,8 +77,10 @@ class CreatePostModal extends Component{
       newState.warringInfo = this.warringInfoArr[4]
     }else if (author.length > 16) {
       newState.warringInfo = this.warringInfoArr[5]
-    }else if (category === '') {
+    }else if (!verifyUserName(author)) {
       newState.warringInfo = this.warringInfoArr[6]
+    }else if (category === '') {
+      newState.warringInfo = this.warringInfoArr[7]
     }else {
       newState.warringLabelDisplay = false;
     }
@@ -83,10 +89,8 @@ class CreatePostModal extends Component{
       this.setState(newState)
     }else {
       const [id, timestamp] = [generateUUID(), Date.now()];
-      title = escapeRegExp(title);
-      body = escapeRegExp(body);
-      author = escapeRegExp(author);
 
+      //异步请求更新
       this.setState({fetching: true});
       addPostAPI({id, timestamp, title, body, author, category}).then(re => {
         this.setState({fetching: false});

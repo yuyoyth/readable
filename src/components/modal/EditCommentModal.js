@@ -4,9 +4,11 @@ import {FormGroup, ControlLabel, FormControl, Label} from 'react-bootstrap'
 import {editComment} from '../../actions/CommentActions'
 import {connect} from "react-redux";
 import PropTypes from "prop-types";
-import escapeRegExp from "escape-string-regexp";
 import {editComment as editCommentAPI} from "../../utils/api";
 
+/**
+ * 编辑评论modal
+ */
 class EditCommentModal extends Component{
   static propTypes = {
     commentId: PropTypes.string.isRequired,
@@ -25,6 +27,7 @@ class EditCommentModal extends Component{
     super(props);
     const {commentId, comments} = this.props;
     const comment = comments[commentId];
+    //载入原评论信息
     this.state.bodyInput = comment.body;
   }
 
@@ -56,8 +59,6 @@ class EditCommentModal extends Component{
       this.setState(newState)
     }else {
       let timestamp = Date.now();
-      body = escapeRegExp(body);
-
       this.setState({fetching: true});
       editCommentAPI(id, {timestamp, body}).then(re => {
         this.setState({fetching: false});

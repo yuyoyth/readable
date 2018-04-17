@@ -4,6 +4,9 @@ import {Button} from 'react-bootstrap'
 import {FaSort, FaSortAmountAsc, FaSortAmountDesc} from 'react-icons/lib/fa'
 import {sortStateEnum} from "./TitleList";
 
+/**
+ * 帖子详情页的排序工具
+ */
 class PostPageSortTool extends Component{
   static propTypes = {
     sortChangeHandle: PropTypes.func.isRequired
@@ -19,8 +22,7 @@ class PostPageSortTool extends Component{
     if (sortState > 1) {
       newSortState = sortStateEnum.DATE_DESC;
     }else {
-      sortState === sortStateEnum.DATE_DESC && (newSortState = sortStateEnum.DATE_ASC);
-      sortState === sortStateEnum.DATE_ASC && (newSortState = sortStateEnum.DATE_DESC);
+      newSortState = sortState === sortStateEnum.DATE_DESC ? sortStateEnum.DATE_ASC : sortStateEnum.DATE_DESC
     }
     this.setState({sortState: newSortState});
     this.props.sortChangeHandle(newSortState);
@@ -32,8 +34,7 @@ class PostPageSortTool extends Component{
     if (sortState < 2) {
       newSortState = sortStateEnum.VOTE_DESC;
     }else {
-      sortState === sortStateEnum.VOTE_DESC && (newSortState = sortStateEnum.VOTE_ASC);
-      sortState === sortStateEnum.VOTE_ASC && (newSortState = sortStateEnum.VOTE_DESC);
+      newSortState = sortState === sortStateEnum.VOTE_DESC ? sortStateEnum.VOTE_ASC : sortStateEnum.VOTE_DESC
     }
     this.setState({sortState: newSortState});
     this.props.sortChangeHandle(newSortState);

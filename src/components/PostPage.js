@@ -7,7 +7,7 @@ import CommentBody, {TypeEnum} from './CommentBody'
 import SortTool from './PostPageSortTool'
 import {getCommentsByPost} from '../utils/api'
 import {initPostToComment} from '../actions/CommentActions'
-import {sortByEnum} from "./HomePage";
+import {sortByEnum} from "./CategoryPage";
 import {sortStateEnum} from "./TitleList";
 import sortBy from "sort-by";
 import EditPostModal from './modal/EditPostModal'
@@ -16,6 +16,9 @@ import CreateCommentModal from './modal/CreateCommentModal'
 import EditCommentModal from './modal/EditCommentModal'
 import DeleteCommentModal from './modal/DeleteCommentModal'
 
+/**
+ * 帖子页面
+ */
 class PostPage extends Component{
   pageNum = 20;
 
@@ -24,20 +27,20 @@ class PostPage extends Component{
     reverse: true,
     displaySlice: [],
 
-    editPostModalOpen: false,
-    editPostModal: '',
+    editPostModalOpen: false, //编辑帖子modal开关
+    editPostModal: '', //编辑帖子modal
 
-    deletePostModalOpen: false,
-    deletePostModal: '',
-    submitDeletePostAndRedirect: false,
+    deletePostModalOpen: false, //删除帖子modal开关
+    deletePostModal: '', //删除帖子modal
+    submitDeletePostAndRedirect: false, //删除并跳转开关
 
-    createCommentModalOpen: false,
+    createCommentModalOpen: false, //添加评论modal开关
 
-    editCommentModalOpen: false,
-    editCommentModal: '',
+    editCommentModalOpen: false, //编辑评论modal开关
+    editCommentModal: '', //编辑评论modal
 
-    deleteCommentModalOpen: false,
-    deleteCommentModal: ''
+    deleteCommentModalOpen: false, //删除评论modal开关
+    deleteCommentModal: '' //删除评论modal
   };
 
   constructor(props) {
@@ -45,12 +48,15 @@ class PostPage extends Component{
     this.state.displaySlice = [0, this.pageNum];
   }
 
+  //编辑按钮回调
   editClick = (type, id) => {
     if (type === TypeEnum.POST) {
+      //生成modal
       const modal = (
         <EditPostModal postId={id}
                          closeHandle={() => this.setState({editPostModalOpen: false, editPostModal: ''})}/>
       );
+      //刷新状态显示modal
       this.setState({editPostModalOpen: true, editPostModal: modal})
     }else if (type === TypeEnum.COMMENT) {
       const modal = (
@@ -61,6 +67,7 @@ class PostPage extends Component{
     }
   };
 
+  //删除按钮回调
   deleteClick = (type, id) => {
     if (type === TypeEnum.POST) {
       const modal = (
@@ -101,19 +108,23 @@ class PostPage extends Component{
     const {createCommentModalOpen} = this.state;
     const {editCommentModalOpen, editCommentModal} = this.state;
     const {deleteCommentModalOpen, deleteCommentModal} = this.state;
+
     const {sortByColumn, reverse, displaySlice} = this.state;
     const {posts, comment, match, initComments} = this.props;
-    const {category, postId} = match.params;
+    const {category, postId} = match.params; //获得地址匹配数据
 
     const post = posts.hasOwnProperty(postId) ? (posts[postId]) : {};
-    const initFlag = comment.postsToComments.hasOwnProperty(postId);
 
+    //判断此帖子的评论是否已初始化，没有则进行一次初始化
+    const initFlag = comment.postsToComments.hasOwnProperty(postId);
     !initFlag && getCommentsByPost(postId).then(comments => initComments(postId, comments));
 
+    //评论列表
     const commentsOfPost = initFlag
       ? Object.keys(comment.postsToComments[postId]).map(e => comment.comments[e])
       : [];
 
+    //按状态排序分页
     let displayComments = commentsOfPost.sort(sortBy(sortByColumn));
     reverse && displayComments.reverse();
     displayComments = displayComments.slice(displaySlice[0], displaySlice[1]);
@@ -146,7 +157,7 @@ class PostPage extends Component{
                         {
                           Object.entries(displayComments).map(([i, e]) => (
                             <ListGroupItem key={e.id}>
-                              <CommentBody type={TypeEnum.COMMENT} id={e.id} floor={parseInt(i)+2}
+                              <CommentBody type={TypeEnum.COMMENT} id={e.id} floor={parseInt(i, 10)+2}
                                            editButtonClickHandle={(type, id) => this.editClick(type, id)}
                                            deleteButtonClickHandle={(type, id) => this.deleteClick(type, id)}/>
                             </ListGroupItem>
@@ -164,12 +175,15 @@ class PostPage extends Component{
           </Grid>
         </div>
 
+        {/*modal生成*/}
+        <CreateCommentModal open={createCommentModalOpen} postId={postId} closeHandle={() => this.setState({createCommentModalOpen: false})}/>
         {editPostModalOpen && editPostModal}
         {deletePostModalOpen && deletePostModal}
-        {submitDeletePostAndRedirect && (<Redirect to={'/'+category}/>)}
-        <CreateCommentModal open={createCommentModalOpen} postId={postId} closeHandle={() => this.setState({createCommentModalOpen: false})}/>
         {editCommentModalOpen && editCommentModal}
         {deleteCommentModalOpen && deleteCommentModal}
+
+        {/*如果帖子被删除，触发跳转*/}
+        {submitDeletePostAndRedirect && (<Redirect to={'/'+category}/>)}
       </div>
     )
   }

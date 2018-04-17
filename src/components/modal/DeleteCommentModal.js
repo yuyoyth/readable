@@ -7,6 +7,9 @@ import {completeDeleteComment} from '../../actions/PostActions'
 import {deleteComment as deleteCommentAPI} from "../../utils/api";
 import PropTypes from "prop-types";
 
+/**
+ * 删除评论modal
+ */
 class DeleteCommentModal extends Component{
   static propTypes = {
     commentId: PropTypes.string.isRequired,
@@ -23,7 +26,6 @@ class DeleteCommentModal extends Component{
   };
 
   submitHandle = (id, parentId) => {
-    let newState = {};
     this.setState({fetching: true});
     deleteCommentAPI(id).then(re => {
       this.setState({fetching: false});

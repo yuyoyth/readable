@@ -5,17 +5,23 @@ import {connect} from "react-redux";
 import NameEditModal from './modal/NameEditModal'
 import {Link} from 'react-router-dom'
 
+/**
+ * header头控件
+ */
 class Header extends Component{
   state = {
     editNameModalOpen: false
   };
 
   render() {
-    const {pathname} = this.props.location;
+    const {pathname} = this.props.location;  //获得地址栏
     const {posts} = this.props;
+
+    //分割地址栏数据
     let path = pathname.slice(1);
     path = path === '' ? [] : path.split('/');
 
+    //如果地址栏有第二个参数，则为postId，查询post标题
     let postTitle = '';
     if (path.length > 1) {
       posts.hasOwnProperty(path[1]) && (postTitle = posts[path[1]].title);
@@ -36,6 +42,7 @@ class Header extends Component{
             <Breadcrumb style={{padding: 0, margin: 0, borderRadius: 0, backgroundColor: 'rgba(0, 0, 0, 0)'}}>
               <Breadcrumb.Item active><Link to='/'>Home</Link></Breadcrumb.Item>
               {
+                //类别导航栏
                 path.length > 0 && <Breadcrumb.Item active>
                   {path.length === 1 ? (
                     path[0]
@@ -45,6 +52,7 @@ class Header extends Component{
                 </Breadcrumb.Item>
               }
               {
+                //帖子导航栏
                 path.length > 1 && <Breadcrumb.Item active>
                   {path.length === 2 ? (
                     postTitle

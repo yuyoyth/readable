@@ -15,13 +15,10 @@ class App extends Component {
   constructor(props) {
     super(props);
 
+    //获取初始化数据，并存储于store
     getPosts().then(data => window.store.dispatch(initPost(data)));
     getCategories().then(data => window.store.dispatch(initCategories(data)));
   }
-
-  categoryClickHandle = (category) => {
-    this.setState({category: category})
-  };
 
   render() {
     return (

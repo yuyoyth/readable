@@ -7,6 +7,11 @@ export default function (state = {}, action) {
   return action_programs.hasOwnProperty(action.type) ? action_programs[action.type]() : state
 }
 
+/**
+ * 初始化类别数据
+ * @param categories 类别对象数组
+ * @returns {any}
+ */
 const initCategories = (categories) => Object.values(categories).reduce(
   (result, v) => {
     v.forEach(e => result[e.name] = e.path);

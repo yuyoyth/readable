@@ -24,6 +24,13 @@ export default function (state = initialState, action) {
   return action_programs.hasOwnProperty(action.type) ? action_programs[action.type]() : state
 }
 
+/**
+ * 初始化帖子对应的评论id列表postsToComments，并保存评论至comments
+ * @param state
+ * @param postId 帖子id
+ * @param comments 属于帖子的评论列表
+ * @returns {*}
+ */
 const initPostToComments = (state, postId, comments) => {
   let newState = {...state};
   !newState.postsToComments.hasOwnProperty(postId) && (newState.postsToComments[postId] = {});
@@ -38,6 +45,16 @@ const initPostToComments = (state, postId, comments) => {
   )
 };
 
+/**
+ * 添加新评论
+ * @param state
+ * @param id 评论id
+ * @param timestamp 时间戳
+ * @param body 评论内容
+ * @param author 评论作者
+ * @param parentId 所属帖子id
+ * @returns {{postsToComments: {}, comments: {}}}
+ */
 const addComment = (state, {id, timestamp, body, author, parentId}) => ({
   ...state,
   postsToComments: {
@@ -58,6 +75,14 @@ const addComment = (state, {id, timestamp, body, author, parentId}) => ({
   },
 });
 
+/**
+ * 编辑已有评论
+ * @param state
+ * @param id 评论id
+ * @param timestamp 时间戳
+ * @param body 评论内容
+ * @returns {{comments: {}}}
+ */
 const editComment = (state, {id, timestamp, body}) => ({
   ...state,
   comments: {
@@ -69,6 +94,12 @@ const editComment = (state, {id, timestamp, body}) => ({
   },
 });
 
+/**
+ * 删除评论
+ * @param state
+ * @param id 评论id
+ * @returns {{postsToComments: {}, comments: {}}}
+ */
 const deleteComment = (state, id) => ({
   postsToComments: {
     ...state.postsToComments,
@@ -87,6 +118,13 @@ const deleteComment = (state, id) => ({
   )
 });
 
+/**
+ * 为评论投票
+ * @param state
+ * @param id 评论id
+ * @param option true-增票，false-减票
+ * @returns {{comments: {}}}
+ */
 const voteComment = (state, {id, option}) => ({
   ...state,
   comments: {
@@ -98,6 +136,12 @@ const voteComment = (state, {id, option}) => ({
   },
 });
 
+/**
+ * 帖子删除时联动清空所属评论
+ * @param state
+ * @param parentId 删除的帖子id
+ * @returns {{}}
+ */
 const deletePost = (state, parentId) => {
   const commentIds = Object.keys(state.postsToComments[parentId]);
   let newState = {...state};

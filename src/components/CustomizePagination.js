@@ -2,20 +2,24 @@ import React, {Component} from 'react'
 import PropTypes from 'prop-types'
 import {Popover, OverlayTrigger, Pagination, Button} from 'react-bootstrap'
 
+/**
+ * 分页工具
+ */
 class CustomizePagination extends Component{
   static propTypes = {
-    totalNum: PropTypes.number.isRequired,
-    pageNum: PropTypes.number.isRequired,
-    changeHandle: PropTypes.func.isRequired
+    totalNum: PropTypes.number.isRequired, //总条目数
+    pageNum: PropTypes.number.isRequired, //每页条目数
+    changeHandle: PropTypes.func.isRequired, //更改页码回调
   };
 
   state = {
-    currentPageValue: 1,
-    goInput: ''
+    currentPageValue: 1, //当前页码
+    goInput: '', //跳转输入
   };
 
-  totalPage = 0;
+  totalPage = 0; //总页数
 
+  //获得分页区间
   getSlice(value) {
     const {pageNum, totalNum} = this.props;
     let [start, end] = [(value-1)*pageNum, value*pageNum];
@@ -54,9 +58,9 @@ class CustomizePagination extends Component{
   goButtonClickHandle = (value) => {
     const {currentPageValue} = this.state;
     const totalPage = this.totalPage;
-    const goValue = parseInt(value);
+    const goValue = parseInt(value, 10);
     if (!isNaN(goValue) && goValue !== currentPageValue) {
-      const newPageNum = goValue < 1 ? 1 : (goValue > totalPage ? totalPage : goValue)
+      const newPageNum = goValue < 1 ? 1 : (goValue > totalPage ? totalPage : goValue);
       this.setState({currentPageValue: newPageNum});
       this.props.changeHandle(this.getSlice(newPageNum));
     }
@@ -107,7 +111,8 @@ class CustomizePagination extends Component{
           <Pagination.First onClick={() => this.moveButtonClickHandle('first')} />
           <Pagination.Prev onClick={() => this.moveButtonClickHandle('prev')} />
           {
-            totalPage <= 5 && (Object.keys(Array(totalPage).fill(true)).map(e => pageItem(parseInt(e)+1)))
+            //不超过5页简单处理
+            totalPage <= 5 && (Object.keys(Array(totalPage).fill(true)).map(e => pageItem(parseInt(e, 10)+1)))
           }
 
           {

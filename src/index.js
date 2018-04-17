@@ -8,12 +8,13 @@ import './index.css';
 import App from './App';
 import registerServiceWorker from './registerServiceWorker';
 
+//打印log信息方便调试
 const logger = store => next => action => {
-  console.group(action.type)
-  console.info('dispatching', action)
-  let result = next(action)
-  console.log('next state', store.getState())
-  console.groupEnd(action.type)
+  console.group(action.type);
+  console.info('dispatching', action);
+  let result = next(action);
+  console.log('next state', store.getState());
+  console.groupEnd(action.type);
   return result
 };
 
@@ -24,6 +25,7 @@ const store = createStore(
     applyMiddleware(logger)
   )
 );
+//store存为全局变量，方便某些时候使用
 window.store = store;
 
 ReactDOM.render(
