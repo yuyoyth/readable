@@ -1,28 +1,46 @@
 .App {
-  text-align: center;
+  min-width: 360px;
 }
 
-.App-logo {
-  animation: App-logo-spin infinite 20s linear;
-  height: 80px;
+.pagination>li {
+  display: inherit;
 }
 
-.App-header {
-  background-color: #222;
-  height: 150px;
-  padding: 20px;
-  color: white;
+.reply-list > .list-group-item {
+  margin: -1px;
+  padding: 0;
 }
 
-.App-title {
-  font-size: 1.5em;
+.category-btn {
+  cursor: pointer;
+  user-select: none;
 }
 
-.App-intro {
-  font-size: large;
+.category-btn:focus, .category-btn:hover {
+  background-color: rgba(228,224,226,0.33);
 }
 
-@keyframes App-logo-spin {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
+.category-btn:active {
+  background-color: rgba(148,144,146,0.33);
+}
+
+.sort-btn, .post-title-btn, .delete-btn {
+  cursor: pointer;
+}
+
+.sort-btn, .delete-btn {
+  user-select: none;
+}
+
+.sort-btn:focus, .sort-btn:hover, .post-title-btn:focus, .post-title-btn:hover {
+  color: #337ab7;
+}
+
+.sort-btn:active, .post-title-btn:active, .delete-btn:active {
+  color: #23527c;
+}
+
+.post-title-btn:focus, .post-title-btn:hover {
+  text-decoration: underline;
+  background-color: transparent;
 }
