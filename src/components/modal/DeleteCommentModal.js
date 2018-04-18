@@ -1,4 +1,4 @@
-import React, {Component} from 'react'
+import React, {Component, Fragment} from 'react'
 import BaseModal from "./BaseModal";
 import {FormGroup, ControlLabel, FormControl, Label} from 'react-bootstrap'
 import {connect} from "react-redux";
@@ -10,7 +10,7 @@ import PropTypes from "prop-types";
 /**
  * 删除评论modal
  */
-class DeleteCommentModal extends Component{
+class DeleteCommentModal extends Component {
   static propTypes = {
     commentId: PropTypes.string.isRequired,
     closeHandle: PropTypes.func.isRequired
@@ -44,7 +44,7 @@ class DeleteCommentModal extends Component{
     const post = comment ? posts[comment.parentId] : undefined;
 
     const body = (
-      <div>
+      <Fragment>
         <form>
           <FormGroup controlId="bodyFormControl">
             <ControlLabel>内容</ControlLabel>
@@ -65,7 +65,7 @@ class DeleteCommentModal extends Component{
         </form>
 
         <Label style={{display: 'block'}} bsStyle="danger">删除后将无法恢复</Label>
-      </div>
+      </Fragment>
     );
 
     return (

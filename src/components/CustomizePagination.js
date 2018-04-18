@@ -5,7 +5,7 @@ import {Popover, OverlayTrigger, Pagination, Button} from 'react-bootstrap'
 /**
  * 分页工具
  */
-class CustomizePagination extends Component{
+class CustomizePagination extends Component {
   static propTypes = {
     totalNum: PropTypes.number.isRequired, //总条目数
     pageNum: PropTypes.number.isRequired, //每页条目数
@@ -22,7 +22,7 @@ class CustomizePagination extends Component{
   //获得分页区间
   getSlice(value) {
     const {pageNum, totalNum} = this.props;
-    let [start, end] = [(value-1)*pageNum, value*pageNum];
+    let [start, end] = [(value - 1) * pageNum, value * pageNum];
     end = end > totalNum ? totalNum : end;
     return [start, end]
   }
@@ -42,11 +42,11 @@ class CustomizePagination extends Component{
     let value = 0;
     if (moveCommand === 'first') {
       value = 1
-    }else if (moveCommand === 'prev') {
-      currentPageValue !== 1 && (value = currentPageValue-1)
-    }else if (moveCommand === 'next') {
-      currentPageValue !== totalPage && (value = currentPageValue+1)
-    }else if (moveCommand === 'last') {
+    } else if (moveCommand === 'prev') {
+      currentPageValue !== 1 && (value = currentPageValue - 1)
+    } else if (moveCommand === 'next') {
+      currentPageValue !== totalPage && (value = currentPageValue + 1)
+    } else if (moveCommand === 'last') {
       value = totalPage
     }
     if (currentPageValue !== value && value > 0) {
@@ -101,18 +101,19 @@ class CustomizePagination extends Component{
       <Pagination.Item
         key={pv}
         active={pv === currentPageValue}
-        onClick={pv === currentPageValue ? (() => {}) : (() => this.numButtonClickHandle(pv))}
+        onClick={pv === currentPageValue ? (() => {
+        }) : (() => this.numButtonClickHandle(pv))}
       >{pv}</Pagination.Item>
     );
 
     return (
       <div style={{textAlign: 'center'}}>
         <Pagination>
-          <Pagination.First onClick={() => this.moveButtonClickHandle('first')} />
-          <Pagination.Prev onClick={() => this.moveButtonClickHandle('prev')} />
+          <Pagination.First onClick={() => this.moveButtonClickHandle('first')}/>
+          <Pagination.Prev onClick={() => this.moveButtonClickHandle('prev')}/>
           {
             //不超过5页简单处理
-            totalPage <= 5 && (Object.keys(Array(totalPage).fill(true)).map(e => pageItem(parseInt(e, 10)+1)))
+            totalPage <= 5 && (Object.keys(Array(totalPage).fill(true)).map(e => pageItem(parseInt(e, 10) + 1)))
           }
 
           {
@@ -123,18 +124,18 @@ class CustomizePagination extends Component{
                 return currentPageValue <= 3 ? pageItem(2) : ellipsis('ellipsisP')
               } else if (e === '2') {
                 return currentPageValue <= 3 ? pageItem(3)
-                  : (currentPageValue >= totalPage-2 ? pageItem(totalPage-2)
+                  : (currentPageValue >= totalPage - 2 ? pageItem(totalPage - 2)
                     : (<Pagination.Item key={currentPageValue} active>{currentPageValue}</Pagination.Item>))
               } else if (e === '3') {
-                return currentPageValue >= totalPage-2 ? pageItem(totalPage-1) : ellipsis('ellipsisN')
+                return currentPageValue >= totalPage - 2 ? pageItem(totalPage - 1) : ellipsis('ellipsisN')
               } else {
                 return pageItem(totalPage)
               }
             }))
           }
 
-          <Pagination.Next onClick={() => this.moveButtonClickHandle('next')} />
-          <Pagination.Last onClick={() => this.moveButtonClickHandle('last')} />
+          <Pagination.Next onClick={() => this.moveButtonClickHandle('next')}/>
+          <Pagination.Last onClick={() => this.moveButtonClickHandle('last')}/>
         </Pagination>
       </div>
     )

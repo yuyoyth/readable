@@ -1,4 +1,4 @@
-import React, {Component} from 'react'
+import React, {Component, Fragment} from 'react'
 import PropTypes from 'prop-types'
 import BaseModal from './BaseModal'
 import {Label} from 'react-bootstrap'
@@ -9,7 +9,7 @@ import {verifyUserName} from '../../utils/tools'
 /**
  * 用户名编辑modal
  */
-class NameEditModal extends Component{
+class NameEditModal extends Component {
   static propTypes = {
     open: PropTypes.bool.isRequired,
     closeHandle: PropTypes.func.isRequired
@@ -43,11 +43,11 @@ class NameEditModal extends Component{
   submitHandle = (value) => {
     if (value === '') {
       this.setState({warringLabelDisplay: true, warringInfo: this.warringInfoArr[0]})
-    }else if (value.length > 16) {
+    } else if (value.length > 16) {
       this.setState({warringLabelDisplay: true, warringInfo: this.warringInfoArr[1]})
-    }else if (!verifyUserName(value)) {
+    } else if (!verifyUserName(value)) {
       this.setState({warringLabelDisplay: true, warringInfo: this.warringInfoArr[2]})
-    }else {
+    } else {
       this.props.editName(value);
       this.closeHandle(true)
     }
@@ -58,13 +58,13 @@ class NameEditModal extends Component{
     const {nameInput, warringLabelDisplay, warringInfo} = this.state;
 
     const modalBody = (
-      <div>
+      <Fragment>
         <input className='form-control'
                value={nameInput}
                placeholder='请输入新用户名'
                onChange={(e) => this.setState({nameInput: e.target.value})}/>
         <Label style={{display: warringLabelDisplay ? 'block' : 'none'}} bsStyle="warning">{warringInfo}</Label>
-      </div>
+      </Fragment>
     );
 
     return (

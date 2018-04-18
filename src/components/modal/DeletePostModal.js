@@ -1,4 +1,4 @@
-import React, {Component} from 'react'
+import React, {Component, Fragment} from 'react'
 import BaseModal from "./BaseModal";
 import {FormGroup, ControlLabel, FormControl, Label} from 'react-bootstrap'
 import PropTypes from "prop-types";
@@ -9,7 +9,7 @@ import {deletePost as deletePostAPI} from "../../utils/api";
 /**
  * 删除帖子modal
  */
-class DeletePostModal extends Component{
+class DeletePostModal extends Component {
   static propTypes = {
     postId: PropTypes.string.isRequired,
     closeHandle: PropTypes.func.isRequired
@@ -41,7 +41,7 @@ class DeletePostModal extends Component{
     const post = posts[postId];
 
     const body = (
-      <div>
+      <Fragment>
         <form>
           <FormGroup controlId='titleFormControl'>
             <ControlLabel>标题</ControlLabel>
@@ -62,12 +62,12 @@ class DeletePostModal extends Component{
 
           <FormGroup controlId="categoryFormControl">
             <ControlLabel>类别</ControlLabel>
-            <FormControl value={post ? post.category: ''} disabled/>
+            <FormControl value={post ? post.category : ''} disabled/>
           </FormGroup>
         </form>
 
         <Label style={{display: 'block'}} bsStyle="danger">删除后将无法恢复</Label>
-      </div>
+      </Fragment>
     );
 
     return (

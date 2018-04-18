@@ -13,7 +13,7 @@ export const TypeEnum = {POST: 1, COMMENT: 2};
 //投票类型
 export const VoteEnum = {DOWN: 0, UP: 1};
 
-class CommentBody extends Component{
+class CommentBody extends Component {
   static propTypes = {
     type: PropTypes.number.isRequired,
     id: PropTypes.string.isRequired,
@@ -33,7 +33,7 @@ class CommentBody extends Component{
       votePostAPI(id, vote === VoteEnum.UP).then(re => {
         this.props.votePost({id, option: vote === VoteEnum.UP})
       })
-    }else if (type === TypeEnum.COMMENT) {
+    } else if (type === TypeEnum.COMMENT) {
       voteCommentAPI(id, vote === VoteEnum.UP).then(re => {
         this.props.voteComment({id, option: vote === VoteEnum.UP})
       })
@@ -47,7 +47,7 @@ class CommentBody extends Component{
     let ele = undefined;
     if (type === TypeEnum.POST) {
       ele = posts[id]
-    }else if (type === TypeEnum.COMMENT) {
+    } else if (type === TypeEnum.COMMENT) {
       ele = comments[id]
     }
 
@@ -68,7 +68,8 @@ class CommentBody extends Component{
                     onClick={() => this.voteButtonClick(type, id, VoteEnum.DOWN)}
             ><FaThumbsODown/></Button>
             <span style={{color: '#337ab7', float: 'right'}}>
-              <Button bsStyle='link' style={{padding: 0, margin: '0 15px 0 0'}} onClick={() => editButtonClickHandle(type, id)}>编辑</Button>
+              <Button bsStyle='link' style={{padding: 0, margin: '0 15px 0 0'}}
+                      onClick={() => editButtonClickHandle(type, id)}>编辑</Button>
               <span style={{padding: 0, margin: '0 15px 0 0'}}>#{floor}</span>
               <span className='delete-btn' onClick={() => deleteButtonClickHandle(type, id)}><FaTimesCircleO size={22}/></span>
             </span>

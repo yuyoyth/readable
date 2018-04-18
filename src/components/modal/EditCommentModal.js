@@ -1,4 +1,4 @@
-import React, {Component} from 'react'
+import React, {Component, Fragment} from 'react'
 import BaseModal from './BaseModal'
 import {FormGroup, ControlLabel, FormControl, Label} from 'react-bootstrap'
 import {editComment} from '../../actions/CommentActions'
@@ -9,7 +9,7 @@ import {editComment as editCommentAPI} from "../../utils/api";
 /**
  * 编辑评论modal
  */
-class EditCommentModal extends Component{
+class EditCommentModal extends Component {
   static propTypes = {
     commentId: PropTypes.string.isRequired,
     closeHandle: PropTypes.func.isRequired
@@ -49,15 +49,15 @@ class EditCommentModal extends Component{
     let newState = {warringLabelDisplay: true};
     if (body === '') {
       newState.warringInfo = this.warringInfoArr[0]
-    }else if (body.length > 1000) {
+    } else if (body.length > 1000) {
       newState.warringInfo = this.warringInfoArr[1]
-    }else {
+    } else {
       newState.warringLabelDisplay = false;
     }
 
     if (newState.warringLabelDisplay) {
       this.setState(newState)
-    }else {
+    } else {
       let timestamp = Date.now();
       this.setState({fetching: true});
       editCommentAPI(id, {timestamp, body}).then(re => {
@@ -76,7 +76,7 @@ class EditCommentModal extends Component{
     const comment = comments[commentId];
 
     const body = (
-      <div>
+      <Fragment>
         <form>
           <FormGroup controlId="bodyFormControl">
             <ControlLabel>内容</ControlLabel>
@@ -94,7 +94,7 @@ class EditCommentModal extends Component{
 
         <Label style={{display: warringLabelDisplay ? 'block' : 'none'}} bsStyle="warning">{warringInfo}</Label>
         <Label style={{display: errLabelDisplay ? 'block' : 'none'}} bsStyle="danger">服务器访问失败</Label>
-      </div>
+      </Fragment>
     );
 
     return (

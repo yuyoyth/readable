@@ -1,4 +1,4 @@
-import React, {Component} from 'react'
+import React, {Component, Fragment} from 'react'
 import PropTypes from 'prop-types'
 import BaseModal from './BaseModal'
 import {FormGroup, ControlLabel, FormControl, Label} from 'react-bootstrap'
@@ -11,7 +11,7 @@ import {addPost as addPostAPI} from '../../utils/api'
 /**
  * 添加帖子modal
  */
-class CreatePostModal extends Component{
+class CreatePostModal extends Component {
   static propTypes = {
     open: PropTypes.bool.isRequired,
     selectedCategory: PropTypes.string,
@@ -42,7 +42,7 @@ class CreatePostModal extends Component{
       newState.titleInput = '';
       newState.bodyInput = '';
       !this.props.hasOwnProperty('selectedCategory') && (newState.categorySelect = '');
-    }else {
+    } else {
       newState.userNameInput = this.props.userName;
     }
     newState.warringLabelDisplay = false;
@@ -67,27 +67,27 @@ class CreatePostModal extends Component{
     let newState = {warringLabelDisplay: true};
     if (title === '') {
       newState.warringInfo = this.warringInfoArr[0]
-    }else if (title.length > 100) {
+    } else if (title.length > 100) {
       newState.warringInfo = this.warringInfoArr[1]
-    }else if (body === '') {
+    } else if (body === '') {
       newState.warringInfo = this.warringInfoArr[2]
-    }else if (body.length > 1000) {
+    } else if (body.length > 1000) {
       newState.warringInfo = this.warringInfoArr[3]
-    }else if (author === '') {
+    } else if (author === '') {
       newState.warringInfo = this.warringInfoArr[4]
-    }else if (author.length > 16) {
+    } else if (author.length > 16) {
       newState.warringInfo = this.warringInfoArr[5]
-    }else if (!verifyUserName(author)) {
+    } else if (!verifyUserName(author)) {
       newState.warringInfo = this.warringInfoArr[6]
-    }else if (category === '') {
+    } else if (category === '') {
       newState.warringInfo = this.warringInfoArr[7]
-    }else {
+    } else {
       newState.warringLabelDisplay = false;
     }
 
     if (newState.warringLabelDisplay) {
       this.setState(newState)
-    }else {
+    } else {
       const [id, timestamp] = [generateUUID(), Date.now()];
 
       //异步请求更新
@@ -105,17 +105,19 @@ class CreatePostModal extends Component{
 
   render() {
     const {open, categories, selectedCategory} = this.props;
-    const {titleInput, bodyInput, userNameInput, categorySelect,
-      warringLabelDisplay, warringInfo, fetching, errLabelDisplay} = this.state;
+    const {
+      titleInput, bodyInput, userNameInput, categorySelect,
+      warringLabelDisplay, warringInfo, fetching, errLabelDisplay
+    } = this.state;
 
     const body = (
-      <div>
+      <Fragment>
         <form>
           <FormGroup controlId='titleFormControl'>
             <ControlLabel>标题</ControlLabel>
             <FormControl placeholder='标题'
                          value={titleInput}
-                         onChange={(e) => this.setState({titleInput: e.target.value})} />
+                         onChange={(e) => this.setState({titleInput: e.target.value})}/>
           </FormGroup>
 
           <FormGroup controlId="bodyFormControl">
@@ -151,7 +153,7 @@ class CreatePostModal extends Component{
 
         <Label style={{display: warringLabelDisplay ? 'block' : 'none'}} bsStyle="warning">{warringInfo}</Label>
         <Label style={{display: errLabelDisplay ? 'block' : 'none'}} bsStyle="danger">服务器访问失败</Label>
-      </div>
+      </Fragment>
     );
 
     return (

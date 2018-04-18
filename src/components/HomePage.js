@@ -9,32 +9,30 @@ import CategoryPage from './CategoryPage'
  */
 export default connect(mapStateToProps)(function HomePage({categories}) {
   return (
-    <div>
-      <Grid>
-        <Row>
-          <Col xs={12} md={12}>
-            <div>
-              <PageHeader>
-                <small>类别</small>
-              </PageHeader>
-              <Panel>
-                <ListGroup>
-                  {
-                    Object.keys(categories).map(k => (
-                      <Link key={k+'-link'} to={'/'+k}>
-                        <ListGroupItem key={k} className='category-btn'>{k}</ListGroupItem>
-                      </Link>
-                    ))
-                  }
-                </ListGroup>
-              </Panel>
-            </div>
+    <Grid>
+      <Row>
+        <Col xs={12} md={12}>
+          <div>
+            <PageHeader>
+              <small>类别</small>
+            </PageHeader>
+            <Panel>
+              <ListGroup>
+                {
+                  Object.keys(categories).map(k => (
+                    <Link key={k + '-link'} to={'/' + k}>
+                      <ListGroupItem key={k} className='category-btn'>{k}</ListGroupItem>
+                    </Link>
+                  ))
+                }
+              </ListGroup>
+            </Panel>
+          </div>
 
-            <CategoryPage all={true}/>
-          </Col>
-        </Row>
-      </Grid>
-    </div>
+          <CategoryPage all={true}/>
+        </Col>
+      </Row>
+    </Grid>
   )
 });
 

@@ -1,4 +1,4 @@
-import React, {Component} from 'react'
+import React, {Component, Fragment} from 'react'
 import {Navbar, Breadcrumb} from 'react-bootstrap'
 import {FaEdit} from 'react-icons/lib/fa'
 import {connect} from "react-redux";
@@ -8,7 +8,7 @@ import {Link} from 'react-router-dom'
 /**
  * header头控件
  */
-class Header extends Component{
+class Header extends Component {
   state = {
     editNameModalOpen: false
   };
@@ -29,13 +29,13 @@ class Header extends Component{
     }
 
     return (
-      <div>
+      <Fragment>
         <Navbar fluid>
           <Navbar.Header>
             <Navbar.Brand>
               <p>Readable</p>
             </Navbar.Brand>
-            <Navbar.Toggle />
+            <Navbar.Toggle/>
           </Navbar.Header>
           <Navbar.Collapse>
           <span className='navbar-text'>
@@ -47,7 +47,7 @@ class Header extends Component{
                   {path.length === 1 ? (
                     path[0]
                   ) : (
-                    <Link to={'/'+path[0]}>{path[0]}</Link>
+                    <Link to={'/' + path[0]}>{path[0]}</Link>
                   )}
                 </Breadcrumb.Item>
               }
@@ -57,7 +57,7 @@ class Header extends Component{
                   {path.length === 2 ? (
                     postTitle
                   ) : (
-                    <Link to={'/'+path[0]+'/'+path[1]}>{postTitle}</Link>
+                    <Link to={'/' + path[0] + '/' + path[1]}>{postTitle}</Link>
                   )}
                 </Breadcrumb.Item>
               }
@@ -67,18 +67,22 @@ class Header extends Component{
             <Navbar.Text pullRight>
               <span>Hi,{' '}</span>
               <span style={{padding: '0 5px 0 0'}}>{this.props.userName}</span>
-              <span style={{cursor: 'pointer'}} onClick={() => {this.setState({editNameModalOpen: true})}}><FaEdit/></span>
+              <span style={{cursor: 'pointer'}} onClick={() => {
+                this.setState({editNameModalOpen: true})
+              }}><FaEdit/></span>
             </Navbar.Text>
           </Navbar.Collapse>
         </Navbar>
 
-        <NameEditModal open={this.state.editNameModalOpen} closeHandle={() => {this.setState({editNameModalOpen: false})}}/>
-      </div>
+        <NameEditModal open={this.state.editNameModalOpen} closeHandle={() => {
+          this.setState({editNameModalOpen: false})
+        }}/>
+      </Fragment>
     )
   }
 }
 
-function mapStateToProps({post ,userName}) {
+function mapStateToProps({post, userName}) {
   return {
     posts: {...post.posts},
     userName: userName

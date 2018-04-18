@@ -1,4 +1,4 @@
-import React, {Component} from 'react'
+import React, {Component, Fragment} from 'react'
 import PropTypes from 'prop-types'
 import {Button} from 'react-bootstrap'
 import {FaSort, FaSortAmountAsc, FaSortAmountDesc} from 'react-icons/lib/fa'
@@ -7,7 +7,7 @@ import {sortStateEnum} from "./TitleList";
 /**
  * 帖子详情页的排序工具
  */
-class PostPageSortTool extends Component{
+class PostPageSortTool extends Component {
   static propTypes = {
     sortChangeHandle: PropTypes.func.isRequired
   };
@@ -21,7 +21,7 @@ class PostPageSortTool extends Component{
     let newSortState = sortStateEnum.DATE_DESC;
     if (sortState > 1) {
       newSortState = sortStateEnum.DATE_DESC;
-    }else {
+    } else {
       newSortState = sortState === sortStateEnum.DATE_DESC ? sortStateEnum.DATE_ASC : sortStateEnum.DATE_DESC
     }
     this.setState({sortState: newSortState});
@@ -33,7 +33,7 @@ class PostPageSortTool extends Component{
     let newSortState = sortStateEnum.VOTE_DESC;
     if (sortState < 2) {
       newSortState = sortStateEnum.VOTE_DESC;
-    }else {
+    } else {
       newSortState = sortState === sortStateEnum.VOTE_DESC ? sortStateEnum.VOTE_ASC : sortStateEnum.VOTE_DESC
     }
     this.setState({sortState: newSortState});
@@ -44,14 +44,14 @@ class PostPageSortTool extends Component{
     const {sortState} = this.state;
 
     return (
-      <span>
+      <Fragment>
         <Button bsStyle='link' onClick={this.voteSortClick}>
           {(() => {
             if (sortState === sortStateEnum.VOTE_ASC) {
               return (<FaSortAmountAsc/>)
-            }else if (sortState === sortStateEnum.VOTE_DESC) {
+            } else if (sortState === sortStateEnum.VOTE_DESC) {
               return (<FaSortAmountDesc/>)
-            }else {
+            } else {
               return (<FaSort/>)
             }
           })()}
@@ -61,15 +61,15 @@ class PostPageSortTool extends Component{
           {(() => {
             if (sortState === sortStateEnum.DATE_ASC) {
               return (<FaSortAmountAsc/>)
-            }else if (sortState === sortStateEnum.DATE_DESC) {
+            } else if (sortState === sortStateEnum.DATE_DESC) {
               return (<FaSortAmountDesc/>)
-            }else {
+            } else {
               return (<FaSort/>)
             }
           })()}
           时间
         </Button>
-      </span>
+      </Fragment>
     )
   }
 }

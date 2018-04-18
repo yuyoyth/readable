@@ -1,4 +1,4 @@
-import React, {Component} from 'react'
+import React, {Component, Fragment} from 'react'
 import BaseModal from './BaseModal'
 import {FormGroup, ControlLabel, FormControl, Label} from 'react-bootstrap'
 import {editName} from "../../actions/UserNameAction";
@@ -12,7 +12,7 @@ import {addComment as addCommentAPI} from "../../utils/api";
 /**
  * 添加评论modal
  */
-class CreateCommentModal extends Component{
+class CreateCommentModal extends Component {
   static propTypes = {
     open: PropTypes.bool.isRequired,
     postId: PropTypes.string.isRequired,
@@ -37,7 +37,7 @@ class CreateCommentModal extends Component{
     let newState = {};
     if (submit) {
       newState.bodyInput = '';
-    }else {
+    } else {
       newState.userNameInput = this.props.userName;
     }
     newState.warringLabelDisplay = false;
@@ -59,21 +59,21 @@ class CreateCommentModal extends Component{
     let newState = {warringLabelDisplay: true};
     if (body === '') {
       newState.warringInfo = this.warringInfoArr[0]
-    }else if (body.length > 1000) {
+    } else if (body.length > 1000) {
       newState.warringInfo = this.warringInfoArr[1]
-    }else if (author === '') {
+    } else if (author === '') {
       newState.warringInfo = this.warringInfoArr[2]
-    }else if (author.length > 16) {
+    } else if (author.length > 16) {
       newState.warringInfo = this.warringInfoArr[3]
-    }else if (!verifyUserName(author)) {
+    } else if (!verifyUserName(author)) {
       newState.warringInfo = this.warringInfoArr[4]
-    }else {
+    } else {
       newState.warringLabelDisplay = false;
     }
 
     if (newState.warringLabelDisplay) {
       this.setState(newState)
-    }else {
+    } else {
       const [id, timestamp] = [generateUUID(), Date.now()];
 
       //异步请求更新
@@ -96,7 +96,7 @@ class CreateCommentModal extends Component{
     const post = posts[postId];
 
     const body = (
-      <div>
+      <Fragment>
         <form>
           <FormGroup controlId="bodyFormControl">
             <ControlLabel>内容</ControlLabel>
@@ -120,7 +120,7 @@ class CreateCommentModal extends Component{
 
         <Label style={{display: warringLabelDisplay ? 'block' : 'none'}} bsStyle="warning">{warringInfo}</Label>
         <Label style={{display: errLabelDisplay ? 'block' : 'none'}} bsStyle="danger">服务器访问失败</Label>
-      </div>
+      </Fragment>
     );
 
     return (
