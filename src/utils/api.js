@@ -26,7 +26,7 @@ export const getPosts = () =>
     .then(res => res.json());
 
 export const addPost = ({id, timestamp, title, body, author, category}) =>
-  fetch(`${api}/posts`,{
+  fetch(`${api}/posts`, {
     method: 'POST',
     headers: pushHeaders,
     body: JSON.stringify({id, timestamp, title, body, author, category})
@@ -37,21 +37,21 @@ export const getPost = (id) =>
     .then(res => res.json());
 
 export const votePost = (id, option) =>
-  fetch(`${api}/posts/${id}`,{
+  fetch(`${api}/posts/${id}`, {
     method: 'POST',
     headers: pushHeaders,
     body: JSON.stringify({option: option ? 'upVote' : 'downVote'})
   }).then(res => res.json());
 
 export const editPost = (id, {title, body}) =>
-  fetch(`${api}/posts/${id}`,{
+  fetch(`${api}/posts/${id}`, {
     method: 'PUT',
     headers: pushHeaders,
     body: JSON.stringify({title, body})
   }).then(res => res.json());
 
 export const deletePost = (id) =>
-  fetch(`${api}/posts/${id}`,{
+  fetch(`${api}/posts/${id}`, {
     method: 'DELETE',
     headers: headers,
   }).then(res => res.json());
@@ -61,7 +61,7 @@ export const getCommentsByPost = (id) =>
     .then(res => res.json());
 
 export const addComment = ({id, timestamp, body, author, parentId}) =>
-  fetch(`${api}/comments`,{
+  fetch(`${api}/comments`, {
     method: 'POST',
     headers: pushHeaders,
     body: JSON.stringify({id, timestamp, body, author, parentId})
@@ -72,21 +72,21 @@ export const getComment = (id) =>
     .then(res => res.json());
 
 export const voteComment = (id, option) =>
-  fetch(`${api}/comments/${id}`,{
+  fetch(`${api}/comments/${id}`, {
     method: 'POST',
     headers: pushHeaders,
     body: JSON.stringify({option: option ? 'upVote' : 'downVote'})
   }).then(res => res.json());
 
 export const editComment = (id, {timestamp, body}) =>
-  fetch(`${api}/comments/${id}`,{
+  fetch(`${api}/comments/${id}`, {
     method: 'PUT',
     headers: pushHeaders,
     body: JSON.stringify({timestamp, body})
   }).then(res => res.json());
 
 export const deleteComment = (id) =>
-  fetch(`${api}/comments/${id}`,{
+  fetch(`${api}/comments/${id}`, {
     method: 'DELETE',
     headers: headers,
   }).then(res => res.json());

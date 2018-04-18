@@ -131,7 +131,7 @@ const voteComment = (state, {id, option}) => ({
     ...state.comments,
     [id]: {
       ...state.comments[id],
-      voteScore: option ? state.comments[id].voteScore+1 : state.comments[id].voteScore-1
+      voteScore: option ? state.comments[id].voteScore + 1 : state.comments[id].voteScore - 1
     },
   },
 });

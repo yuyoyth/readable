@@ -14,13 +14,13 @@ export function formatTimestamp(timestamp, format = 'yyyy-MM-dd hh:mm:ss') {
 
 function formatDate(date, format = 'yyyy-MM-dd hh:mm:ss') {
   let o = {
-    "M+" : date.getMonth() + 1,// month
-    "d+" : date.getDate(),// day
-    "h+" : date.getHours(),// hour
-    "m+" : date.getMinutes(),// minute
-    "s+" : date.getSeconds(),// second
-    "q+" : Math.floor((date.getMonth() + 3) / 3),// quarter
-    "S" : date.getMilliseconds() // millisecond
+    "M+": date.getMonth() + 1,// month
+    "d+": date.getDate(),// day
+    "h+": date.getHours(),// hour
+    "m+": date.getMinutes(),// minute
+    "s+": date.getSeconds(),// second
+    "q+": Math.floor((date.getMonth() + 3) / 3),// quarter
+    "S": date.getMilliseconds() // millisecond
   };
   if (/(y+)/.test(format) || /(Y+)/.test(format)) {
     format = format.replace(RegExp.$1, (date.getFullYear() + "").substr(4 - RegExp.$1.length));

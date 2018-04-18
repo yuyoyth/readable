@@ -17,9 +17,11 @@ import Loading from 'react-loading'
  * @returns {*}
  * @constructor
  */
-export default function BaseModal({title, body, open, backdrop = 'static', closeHandle = ()=>{},
-                                    submitButton = false, submitName = '提交', submitType='primary', submitHandle = ()=>{},
-                                    asyncFetch = false}) {
+export default function BaseModal({
+                                    title, body, open, backdrop = 'static', closeHandle = () => {},
+                                    submitButton = false, submitName = '提交', submitType = 'primary', submitHandle = () => {},
+                                    asyncFetch = false
+                                  }) {
   return (
     <Modal show={open} onHide={closeHandle} backdrop={backdrop}>
       <Modal.Header closeButton>
@@ -34,8 +36,10 @@ export default function BaseModal({title, body, open, backdrop = 'static', close
           (() => {
             if (submitButton) {
               if (asyncFetch) {
-                return (<Button bsStyle="primary" disabled><Loading delay={200} type='bubbles' color='#fff' className='loading' height='20px' width='28px' /></Button>)
-              }else {
+                return (<Button bsStyle="primary" disabled><Loading delay={200} type='bubbles' color='#fff'
+                                                                    className='loading' height='20px'
+                                                                    width='28px'/></Button>)
+              } else {
                 return (<Button bsStyle={submitType} onClick={submitHandle}>{submitName}</Button>)
               }
             }
