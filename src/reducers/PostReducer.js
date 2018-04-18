@@ -9,19 +9,20 @@ import {
 } from '../actions/PostActions'
 
 const initialState = {
+  initFlag: false,
   categoriesToPost: {},
   posts: {}
 };
 
 export default function (state = initialState, action) {
   let action_programs = {
-    [INIT_POST]: ()=> init(action.posts),
-    [ADD_POST]: ()=> addPost(state, action),
-    [EDIT_POST]: ()=> editPost(state, action),
-    [DELETE_POST]: ()=> deletePost(state, action.id),
-    [VOTE_POST]: ()=> votePost(state, action),
-    [COMPLETED_ADD_COMMENT]: ()=> completeAddOrDeleteComment(state, action.id, true),
-    [COMPLETED_DELETE_COMMENT]: ()=> completeAddOrDeleteComment(state, action.id, false),
+    [INIT_POST]: () => init(action.posts),
+    [ADD_POST]: () => addPost(state, action),
+    [EDIT_POST]: () => editPost(state, action),
+    [DELETE_POST]: () => deletePost(state, action.id),
+    [VOTE_POST]: () => votePost(state, action),
+    [COMPLETED_ADD_COMMENT]: () => completeAddOrDeleteComment(state, action.id, true),
+    [COMPLETED_DELETE_COMMENT]: () => completeAddOrDeleteComment(state, action.id, false),
   };
   return action_programs.hasOwnProperty(action.type) ? action_programs[action.type]() : state
 }
@@ -31,16 +32,22 @@ export default function (state = initialState, action) {
  * @param posts 帖子数组
  * @returns {*}
  */
-const init = (posts) => posts.reduce(
-  (result, post) => {
-    const {id, timestamp, title, body, author, category, voteScore, commentCount, deleted} = post;
-    if (deleted) return result;
-    !result.categoriesToPost.hasOwnProperty(category) && (result.categoriesToPost[category] = {});
-    result.categoriesToPost[category][id] = true;
-    result.posts[id] = {id, timestamp, title, body, author, category, voteScore, commentCount};
-    return result
-  }, {...initialState}
-);
+const init = (posts) => {
+  let newState = {
+    ...initialState,
+    initFlag: true
+  };
+  return posts.reduce(
+    (result, post) => {
+      const {id, timestamp, title, body, author, category, voteScore, commentCount, deleted} = post;
+      if (deleted) return result;
+      !result.categoriesToPost.hasOwnProperty(category) && (result.categoriesToPost[category] = {});
+      result.categoriesToPost[category][id] = true;
+      result.posts[id] = {id, timestamp, title, body, author, category, voteScore, commentCount};
+      return result
+    }, newState
+  );
+};
 
 /**
  * 添加帖子
@@ -130,7 +137,7 @@ const votePost = (state, {id, option}) => ({
     ...state.posts,
     [id]: {
       ...state.posts[id],
-      voteScore: option ? state.posts[id].voteScore+1 : state.posts[id].voteScore-1
+      voteScore: option ? state.posts[id].voteScore + 1 : state.posts[id].voteScore - 1
     },
   },
 });
@@ -148,7 +155,7 @@ const completeAddOrDeleteComment = (state, id, commentCountUp) => ({
     ...state.posts,
     [id]: {
       ...state.posts[id],
-      commentCount: commentCountUp ? state.posts[id].commentCount+1 : state.posts[id].commentCount-1
+      commentCount: commentCountUp ? state.posts[id].commentCount + 1 : state.posts[id].commentCount - 1
     }
   }
 });

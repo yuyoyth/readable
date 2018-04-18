@@ -1,5 +1,6 @@
-import React, {Component} from 'react'
+import React, {Component, Fragment} from 'react'
 import {Button, Col, Grid, PageHeader, Panel, Row} from 'react-bootstrap'
+import {Redirect} from 'react-router-dom'
 import PostEditModal from './modal/CreatePostModal'
 import CustomizePagination from './CustomizePagination'
 import TitleList from './TitleList'
@@ -16,7 +17,7 @@ export const sortByEnum = {
 /**
  * 类别页面
  */
-class CategoryPage extends Component{
+class CategoryPage extends Component {
   pageNum = 30; //分页每页30项
 
   state = {
@@ -37,11 +38,11 @@ class CategoryPage extends Component{
   sortChange = (sortState) => {
     if (sortState === sortStateEnum.VOTE_ASC) {
       this.setState({sortByColumn: sortByEnum.VOTE, reverse: false})
-    }else if (sortState === sortStateEnum.VOTE_DESC) {
+    } else if (sortState === sortStateEnum.VOTE_DESC) {
       this.setState({sortByColumn: sortByEnum.VOTE, reverse: true})
-    }else if (sortState === sortStateEnum.DATE_ASC) {
+    } else if (sortState === sortStateEnum.DATE_ASC) {
       this.setState({sortByColumn: sortByEnum.DATE, reverse: false})
-    }else if (sortState === sortStateEnum.DATE_DESC) {
+    } else if (sortState === sortStateEnum.DATE_DESC) {
       this.setState({sortByColumn: sortByEnum.DATE, reverse: true})
     }
   };
@@ -52,9 +53,16 @@ class CategoryPage extends Component{
     //all为属性参数，如果有效，将不进行类别筛选，显示全部帖子
     const {posts, categoriesToPost, all} = this.props;
 
-    //获得类别参数
     let category;
-    !all && (category = this.props.match.params.category);
+    if (!all) {
+      //获得类别参数
+      category = this.props.match.params.category;
+      const {categories} = this.props;
+      //初始化完成却没找到对应类别，404
+      if (Object.keys(categories).length > 0 && !categories.hasOwnProperty(category)) {
+        return <Redirect to='/404'/>
+      }
+    }
 
     //获得类别下的所有帖子
     let allPosts = all
@@ -66,7 +74,7 @@ class CategoryPage extends Component{
     displayPosts = displayPosts.slice(displaySlice[0], displaySlice[1]);
 
     const body = (
-      <div>
+      <Fragment>
         <PageHeader>
           <span><small>帖子</small></span>
           <span style={{float: 'right'}}>
@@ -75,34 +83,33 @@ class CategoryPage extends Component{
         </PageHeader>
 
         <Panel>
-          <TitleList posts={displayPosts} sortChangeHandle={(newSortState) => this.sortChange(newSortState)} />
+          <TitleList posts={displayPosts} sortChangeHandle={(newSortState) => this.sortChange(newSortState)}/>
           <CustomizePagination totalNum={allPosts.length}
                                pageNum={this.pageNum}
-                               changeHandle={(newSlice) => this.setState({displaySlice: newSlice})} />
+                               changeHandle={(newSlice) => this.setState({displaySlice: newSlice})}/>
         </Panel>
 
         <PostEditModal open={createPostModalOpen}
                        closeHandle={() => this.setState({createPostModalOpen: false})}
                        selectedCategory={category}/>
-      </div>
+      </Fragment>
     );
 
-    return all ? body :(
-      <div>
-        <Grid>
-          <Row>
-            <Col xs={12} md={12}>
-              {body}
-            </Col>
-          </Row>
-        </Grid>
-      </div>
+    return all ? body : (
+      <Grid>
+        <Row>
+          <Col xs={12} md={12}>
+            {body}
+          </Col>
+        </Row>
+      </Grid>
     )
   }
 }
 
-function mapStateToProps({post}) {
+function mapStateToProps({categories, post}) {
   return {
+    categories: {...categories},
     posts: {...post.posts},
     categoriesToPost: {...post.categoriesToPost}
   }

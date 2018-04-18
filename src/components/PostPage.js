@@ -1,4 +1,4 @@
-import React, {Component} from 'react'
+import React, {Component, Fragment} from 'react'
 import {connect} from 'react-redux'
 import {Button, Col, Grid, ListGroup, ListGroupItem, PageHeader, Panel, Row} from 'react-bootstrap'
 import {Redirect} from 'react-router-dom'
@@ -19,7 +19,7 @@ import DeleteCommentModal from './modal/DeleteCommentModal'
 /**
  * 帖子页面
  */
-class PostPage extends Component{
+class PostPage extends Component {
   pageNum = 20;
 
   state = {
@@ -54,11 +54,11 @@ class PostPage extends Component{
       //生成modal
       const modal = (
         <EditPostModal postId={id}
-                         closeHandle={() => this.setState({editPostModalOpen: false, editPostModal: ''})}/>
+                       closeHandle={() => this.setState({editPostModalOpen: false, editPostModal: ''})}/>
       );
       //刷新状态显示modal
       this.setState({editPostModalOpen: true, editPostModal: modal})
-    }else if (type === TypeEnum.COMMENT) {
+    } else if (type === TypeEnum.COMMENT) {
       const modal = (
         <EditCommentModal commentId={id}
                           closeHandle={() => this.setState({editCommentModalOpen: false, editCommentModal: ''})}/>
@@ -72,16 +72,20 @@ class PostPage extends Component{
     if (type === TypeEnum.POST) {
       const modal = (
         <DeletePostModal postId={id}
-                       closeHandle={(submit) => {
-                         if (submit) {
-                           this.setState({deletePostModalOpen: false, deletePostModal: '', submitDeletePostAndRedirect: true})
-                         }else {
-                           this.setState({deletePostModalOpen: false, deletePostModal: ''})
-                         }
-                       }}/>
+                         closeHandle={(submit) => {
+                           if (submit) {
+                             this.setState({
+                               deletePostModalOpen: false,
+                               deletePostModal: '',
+                               submitDeletePostAndRedirect: true
+                             })
+                           } else {
+                             this.setState({deletePostModalOpen: false, deletePostModal: ''})
+                           }
+                         }}/>
       );
       this.setState({deletePostModalOpen: true, deletePostModal: modal})
-    }else if (type === TypeEnum.COMMENT) {
+    } else if (type === TypeEnum.COMMENT) {
       const modal = (
         <DeleteCommentModal commentId={id}
                             closeHandle={() => this.setState({deleteCommentModalOpen: false, deleteCommentModal: ''})}/>
@@ -93,11 +97,11 @@ class PostPage extends Component{
   sortChange = (sortState) => {
     if (sortState === sortStateEnum.VOTE_ASC) {
       this.setState({sortByColumn: sortByEnum.VOTE, reverse: false})
-    }else if (sortState === sortStateEnum.VOTE_DESC) {
+    } else if (sortState === sortStateEnum.VOTE_DESC) {
       this.setState({sortByColumn: sortByEnum.VOTE, reverse: true})
-    }else if (sortState === sortStateEnum.DATE_ASC) {
+    } else if (sortState === sortStateEnum.DATE_ASC) {
       this.setState({sortByColumn: sortByEnum.DATE, reverse: false})
-    }else if (sortState === sortStateEnum.DATE_DESC) {
+    } else if (sortState === sortStateEnum.DATE_DESC) {
       this.setState({sortByColumn: sortByEnum.DATE, reverse: true})
     }
   };
@@ -110,8 +114,13 @@ class PostPage extends Component{
     const {deleteCommentModalOpen, deleteCommentModal} = this.state;
 
     const {sortByColumn, reverse, displaySlice} = this.state;
-    const {posts, comment, match, initComments} = this.props;
+    const {postInitFlag, posts, comment, match, initComments} = this.props;
     const {category, postId} = match.params; //获得地址匹配数据
+
+    //所有帖子加载完毕但却没找到对应帖子，404
+    if (postInitFlag && !posts.hasOwnProperty(postId)) {
+      return <Redirect to='/404'/>
+    }
 
     const post = posts.hasOwnProperty(postId) ? (posts[postId]) : {};
 
@@ -130,67 +139,68 @@ class PostPage extends Component{
     displayComments = displayComments.slice(displaySlice[0], displaySlice[1]);
 
     return (
-      <div>
-        <div>
-          <Grid>
-            <Row>
-              <Col xs={12} md={12}>
-                {Object.keys(post).length > 0 && (
-                  <div style={{marginBottom: '50px'}}>
-                    <PageHeader style={{marginTop: '0'}}>
-                      <span><small style={{fontSize: '45%'}}>{post.title}</small></span>
-                    </PageHeader>
-                    <CommentBody type={TypeEnum.POST} id={postId} floor={1}
-                                 editButtonClickHandle={(type, id) => this.editClick(type, id)}
-                                 deleteButtonClickHandle={(type, id) => this.deleteClick(type, id)}/>
-                  </div>
-                )}
-
-                <div>
-                  <div>
-                    <SortTool sortChangeHandle={(newSortState) => this.sortChange(newSortState)}/>
-                    <Button bsStyle='link' style={{float: 'right'}} onClick={() => this.setState({createCommentModalOpen: true})}>Reply</Button>
-                  </div>
-                  <Panel>
-                    <div>
-                      <ListGroup className='reply-list'>
-                        {
-                          Object.entries(displayComments).map(([i, e]) => (
-                            <ListGroupItem key={e.id}>
-                              <CommentBody type={TypeEnum.COMMENT} id={e.id} floor={parseInt(i, 10)+2}
-                                           editButtonClickHandle={(type, id) => this.editClick(type, id)}
-                                           deleteButtonClickHandle={(type, id) => this.deleteClick(type, id)}/>
-                            </ListGroupItem>
-                          ))
-                        }
-                      </ListGroup>
-                      <CustomizePagination totalNum={commentsOfPost.length}
-                                           pageNum={this.pageNum}
-                                           changeHandle={(newSlice) => this.setState({displaySlice: newSlice})}/>
-                    </div>
-                  </Panel>
+      <Fragment>
+        <Grid>
+          <Row>
+            <Col xs={12} md={12}>
+              {Object.keys(post).length > 0 && (
+                <div style={{marginBottom: '50px'}}>
+                  <PageHeader style={{marginTop: '0'}}>
+                    <span><small style={{fontSize: '45%'}}>{post.title}</small></span>
+                  </PageHeader>
+                  <CommentBody type={TypeEnum.POST} id={postId} floor={1}
+                               editButtonClickHandle={(type, id) => this.editClick(type, id)}
+                               deleteButtonClickHandle={(type, id) => this.deleteClick(type, id)}/>
                 </div>
-              </Col>
-            </Row>
-          </Grid>
-        </div>
+              )}
+
+              <div>
+                <div>
+                  <SortTool sortChangeHandle={(newSortState) => this.sortChange(newSortState)}/>
+                  <Button bsStyle='link' style={{float: 'right'}}
+                          onClick={() => this.setState({createCommentModalOpen: true})}>Reply</Button>
+                </div>
+                <Panel>
+                  <div>
+                    <ListGroup className='reply-list'>
+                      {
+                        Object.entries(displayComments).map(([i, e]) => (
+                          <ListGroupItem key={e.id}>
+                            <CommentBody type={TypeEnum.COMMENT} id={e.id} floor={parseInt(i, 10) + 2}
+                                         editButtonClickHandle={(type, id) => this.editClick(type, id)}
+                                         deleteButtonClickHandle={(type, id) => this.deleteClick(type, id)}/>
+                          </ListGroupItem>
+                        ))
+                      }
+                    </ListGroup>
+                    <CustomizePagination totalNum={commentsOfPost.length}
+                                         pageNum={this.pageNum}
+                                         changeHandle={(newSlice) => this.setState({displaySlice: newSlice})}/>
+                  </div>
+                </Panel>
+              </div>
+            </Col>
+          </Row>
+        </Grid>
 
         {/*modal生成*/}
-        <CreateCommentModal open={createCommentModalOpen} postId={postId} closeHandle={() => this.setState({createCommentModalOpen: false})}/>
+        <CreateCommentModal open={createCommentModalOpen} postId={postId}
+                            closeHandle={() => this.setState({createCommentModalOpen: false})}/>
         {editPostModalOpen && editPostModal}
         {deletePostModalOpen && deletePostModal}
         {editCommentModalOpen && editCommentModal}
         {deleteCommentModalOpen && deleteCommentModal}
 
         {/*如果帖子被删除，触发跳转*/}
-        {submitDeletePostAndRedirect && (<Redirect to={'/'+category}/>)}
-      </div>
+        {submitDeletePostAndRedirect && (<Redirect to={'/' + category}/>)}
+      </Fragment>
     )
   }
 }
 
 function mapStateToProps({post, comment}) {
   return {
+    postInitFlag: post.initFlag,
     posts: {...post.posts},
     comment: {...comment}
   }
